@@ -31,7 +31,9 @@ public class UserDao {
 				e.printStackTrace();
 			} finally {
 				try {
-					c.close();
+					if (c != null) {
+						c.close();
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
