@@ -142,8 +142,7 @@ public class UserDao {
 
 				ResultSet rs = ps.executeQuery();
 
-				while (rs.next()) 
-				{
+				while (rs.next()) {
 					int uid = rs.getInt("uid");
 					String firstname = rs.getString("firstname");
 					String lastname = rs.getString("lastname");
@@ -169,4 +168,52 @@ public class UserDao {
 			}
 		}
 	}
+
+	// Display Single Data
+	public Users fetchSingleData(Users u) {
+		Connection c = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			c = DBConnection.getConnection();
+
+			if (c != null) {
+				String query = "select * from userdetails where uid = ?";
+
+				ps = c.prepareStatement(query);
+
+				ps.setInt(1, u.getUid());
+
+				rs = ps.executeQuery();
+
+				if (rs.next()) {
+					u.setUid(rs.getInt("uid"));
+					u.setFirstName(rs.getString("firstname"));
+					u.setLastName(rs.getString("lastname"));
+					u.setEmail(rs.getString("email"));
+					u.setPhoneNo(rs.getInt("phoneno"));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (ps != null) {
+					ps.close();
+				}
+				if (c != null) {
+					c.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return u;
+	}
+	
 }
